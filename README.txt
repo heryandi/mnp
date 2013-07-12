@@ -15,6 +15,7 @@ Example usage:
   Download multiple packages:
     mnp download <package1> <package2> <package3>
   Download from custom repository:
+    mnp download <package> -r <repo_name>
     mnp download <package> -i <repo_url>
 
 * Uploading a package:
@@ -23,3 +24,12 @@ Example usage:
     mnp upload
   Upload to custom repository:
     mnp upload -r <repo_name>
+
+<repo_name> and <repo_url> will be read from your ~/.pypirc file, so make sure 
+the file is setup properly.
+
+Default value:
+  <repo_name>: mininet
+  <repo_url>: https://pypi.python.org/simple/
+
+TODO: Update the default value of <repo_url> once finalized.
