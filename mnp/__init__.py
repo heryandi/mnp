@@ -4,11 +4,12 @@ import os
 import sys
 
 from commands import download, upload
+from utils import craft_download_url
 
 default_pypi_name = "mininet"
 # TODO: Change to Mininet repo URL once finalized
 default_pypi_upload_url = "http://localhost:8000/"
-default_pypi_download_url = default_pypi_upload_url.rstrip("/") + "/simple/"
+default_pypi_download_url = craft_download_url(default_pypi_upload_url)
 pypirc = ConfigParser.ConfigParser()
 
 def init():
@@ -19,7 +20,7 @@ def init():
     try:
         pypirc.read(os.path.join(os.path.expanduser("~"), ".pypirc"))
         default_pypi_upload_url = pypirc.get(default_pypi_name, "repository")
-        default_pypi_download_url = default_pypi_upload_url.rstrip("/") + "/simple/"
+        default_pypi_download_url = craft_download_url(default_pypi_upload_url)
     except ConfigParser.NoSectionError as e:
         print(e.message)
         print("Make sure the .pypirc file is correct.\n")
