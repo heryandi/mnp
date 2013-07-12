@@ -10,29 +10,38 @@ Example usage:
 
 * Downloading:
 
-  Download 1 package:
-    mnp download <package>
-  Download multiple packages:
-    mnp download <package1> <package2> <package3>
-  Download from custom repository:
-    mnp download <package> -r <repo_name>
-    mnp download <package> -i <repo_url>
+  - Download one package:
 
-* Uploading a package:
+    + mnp download <package>
 
-  Upload package:
-    mnp upload
-  Upload to custom repository:
-    mnp upload -r <repo_name>
+  - Download multiple packages:
+
+    + mnp download <package1> <package2> <package3>
+
+  - Download from custom repository:
+
+    + mnp download <package> -r <repo_name>
+
+    + mnp download <package> -i <repo_url>
+
+* Uploading:
+
+  - Upload package:
+
+    + mnp upload
+
+  - Upload to custom repository:
+
+    + mnp upload -r <repo_name>
 
 <repo_name> and <repo_url> will be read from your ~/.pypirc file, so make sure 
 the file is setup properly.
 
-Default value:
+* Default values:
 
-* <repo_name>: mininet
+  - <repo_name>: mininet
 
-* <repo_url>: http://localhost:8000/simple/
+  - <repo_url>: http://localhost:8000/simple/
 
 
 TODO: Update the default value of <repo_url> once finalized.
