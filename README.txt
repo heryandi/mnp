@@ -29,7 +29,10 @@ Example usage:
 the file is setup properly.
 
 Default value:
-  <repo_name>: mininet
-  <repo_url>: http://localhost:8000/simple/
+
+* <repo_name>: mininet
+
+* <repo_url>: http://localhost:8000/simple/
+
 
 TODO: Update the default value of <repo_url> once finalized.
