@@ -30,6 +30,6 @@ the file is setup properly.
 
 Default value:
   <repo_name>: mininet
-  <repo_url>: https://pypi.python.org/simple/
+  <repo_url>: http://localhost:8000/simple/
 
 TODO: Update the default value of <repo_url> once finalized.
