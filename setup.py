@@ -12,7 +12,7 @@ setup(
     url='https://github.com/heryandi/mnp',
     license='MIT',
     description='Wrapper tools to manage Mininet package',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     install_requires=[
         "pip",
         "distribute",
