@@ -7,16 +7,19 @@ from commands import download, upload
 
 default_pypi_name = "mininet"
 # TODO: Change to Mininet repo URL once finalized
-default_pypi_url = "https://pypi.python.org/simple/"
+default_pypi_upload_url = "http://localhost:8000/pypi/"
+default_pypi_download_url = "http://localhost:8000/simple/"
 pypirc = ConfigParser.ConfigParser()
 
 def init():
     global pypirc
-    global default_pypi_url
+    global default_pypi_upload_url
+    global default_pypi_download_url
 
     try:
         pypirc.read(os.path.join(os.path.expanduser("~"), ".pypirc"))
-        default_pypi_url = pypirc.get(default_pypi_name, "repository")
+        default_pypi_upload_url = pypirc.get(default_pypi_name, "repository")
+        default_pypi_download_url = default_pypi_upload_url.replace("pypi", "simple")
     except ConfigParser.NoSectionError as e:
         print(e.message)
         print("Make sure the .pypirc file is correct.\n")
@@ -25,6 +28,7 @@ def init():
         print("Make sure the .pypirc file is correct.\n")
 
 def download_handler(args, additional_args):
+    index_url = default_pypi_download_url
     if args.repository:
         index_url = pypirc.get(args.repository[0], "repository")
     elif args.index_url:
