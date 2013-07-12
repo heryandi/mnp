@@ -1,2 +1,1 @@
-v0.1.1, 1 January 2001 -- Make some changes.
-v0.1.0, 1 January 2000 -- Initial release.
+v1.0.0, July 2013 - Initial release
