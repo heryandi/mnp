@@ -31,7 +31,7 @@ def init():
 def download_handler(args, additional_args):
     index_url = default_pypi_download_url
     if args.repository:
-        index_url = pypirc.get(args.repository[0], "repository")
+        index_url = craft_download_url(pypirc.get(args.repository[0], "repository"))
     elif args.index_url:
         index_url = args.index_url[0]
     download(args.packages, index_url, additional_args)
