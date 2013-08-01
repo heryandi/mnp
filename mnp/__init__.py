@@ -3,7 +3,7 @@ import ConfigParser
 import os
 import sys
 
-from commands import download, upload
+from commands import download, list, upload
 from utils import craft_download_url
 
 default_pypi_name = "mininet"
@@ -39,6 +39,9 @@ def download_handler(args, additional_args):
 def upload_handler(args, additional_args):
     upload(args.repository[0], additional_args)
 
+def list_handler(args, additional_args):
+	list(pypirc.get(args.repository[0], "repository"))
+
 def main():
     init()
     parser = argparse.ArgumentParser()
@@ -54,6 +57,10 @@ def main():
     up_subp = subparsers.add_parser("upload")
     up_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
     up_subp.set_defaults(func = upload_handler)
+
+    list_subp = subparsers.add_parser("list")
+    list_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
+    list_subp.set_defaults(func = list_handler)
 
     result, rest = parser.parse_known_args()
     result.func(result, rest)
