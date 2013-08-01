@@ -3,7 +3,7 @@ import ConfigParser
 import os
 import sys
 
-from commands import download, list, upload
+from commands import download, list_packages, search, upload
 from utils import craft_download_url
 
 default_pypi_name = "mininet"
@@ -40,7 +40,10 @@ def upload_handler(args, additional_args):
     upload(args.repository[0], additional_args)
 
 def list_handler(args, additional_args):
-	list(pypirc.get(args.repository[0], "repository"))
+    list_packages(pypirc.get(args.repository[0], "repository"))
+
+def search_handler(args, additional_args):
+    search(pypirc.get(args.repository[0], "repository"), " ".join(args.query))
 
 def main():
     init()
@@ -61,6 +64,11 @@ def main():
     list_subp = subparsers.add_parser("list")
     list_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
     list_subp.set_defaults(func = list_handler)
+
+    search_subp = subparsers.add_parser("search")
+    search_subp.add_argument("query", nargs = "+", help = "search term(s)")
+    search_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
+    search_subp.set_defaults(func = search_handler)
 
     result, rest = parser.parse_known_args()
     result.func(result, rest)
