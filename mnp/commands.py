@@ -37,3 +37,18 @@ def search(index_url, query):
     for k, p in sorted(grouped.items()):
         newest_p = sorted(p, key = lambda x: parse_version(x["version"]), reverse = True)[0]
         print("- ".join([newest_p["name"].ljust(20), newest_p["summary"]]))
+
+def docs(index_url, package_name):
+    rpc_client = xmlrpclib.ServerProxy(index_url)
+    response = rpc_client.docs(package_name)
+    print(response)
+
+def info(index_url, package_name, package_version = -1):
+    rpc_client = xmlrpclib.ServerProxy(index_url)
+    response = rpc_client.info(package_name, package_version)
+    print("Name: %s" % response["name"])
+    print("Version: %s" % response["version"])
+    print("Summary: %s" % response["summary"])
+    print("Author: %s" % response["author"])
+    print("Home page: %s" % response["home_page"])
+    print("Project page: %s" % response["project_page"])

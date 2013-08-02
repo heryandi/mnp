@@ -3,7 +3,7 @@ import ConfigParser
 import os
 import sys
 
-from commands import download, list_packages, search, upload
+from commands import docs, download, info, list_packages, search, upload
 from utils import craft_download_url
 
 default_pypi_name = "mininet"
@@ -45,6 +45,12 @@ def list_handler(args, additional_args):
 def search_handler(args, additional_args):
     search(pypirc.get(args.repository[0], "repository"), " ".join(args.query))
 
+def docs_handler(args, additional_args):
+    docs(pypirc.get(args.repository[0], "repository"), " ".join(args.package_name))
+
+def info_handler(args, additional_args):
+    info(pypirc.get(args.repository[0], "repository"), args.package_name[0], args.package_version)
+
 def main():
     init()
     parser = argparse.ArgumentParser()
@@ -69,6 +75,17 @@ def main():
     search_subp.add_argument("query", nargs = "+", help = "search term(s)")
     search_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
     search_subp.set_defaults(func = search_handler)
+
+    docs_subp = subparsers.add_parser("docs")
+    docs_subp.add_argument("package_name", nargs = 1, help = "package name")
+    docs_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
+    docs_subp.set_defaults(func = docs_handler)
+
+    info_subp = subparsers.add_parser("info")
+    info_subp.add_argument("package_name", nargs = 1, help = "package name")
+    info_subp.add_argument("package_version", nargs = "?", default = -1, help = "package version")
+    info_subp.add_argument("-r", "--repository", nargs = 1, default = [default_pypi_name])
+    info_subp.set_defaults(func = info_handler)
 
     result, rest = parser.parse_known_args()
     result.func(result, rest)

@@ -34,6 +34,38 @@ Example usage:
 
     + mnp upload -r <repo_name>
 
+* Listing available packages:
+
+  - mnp list
+
+  - mnp list -r <repo_name>
+
+* Searching:
+
+  - mnp search <query>
+
+  - mnp search <query> -r <repo_name>
+
+* Print package README:
+
+  - mnp docs <package_name>
+
+  - mnp docs <package_name> -r <repo_name>
+
+* Print package information:
+
+  - Print information of latest version of a package:
+
+    + mnp info <package_name>
+
+    + mnp info <package_name> -r <repo_name>
+
+  - Print information of specific version of a package:
+
+    + mnp info <package_name> <package_version>
+
+    + mnp info <package_name> <package_version> -r <repo_name>
+
 <repo_name> and <repo_url> will be read from your ~/.pypirc file, so make sure 
 the file is setup properly.
 
@@ -42,6 +74,5 @@ the file is setup properly.
   - <repo_name>: mininet
 
   - <repo_url>: http://localhost:8000/simple/
-
 
 TODO: Update the default value of <repo_url> once finalized.
