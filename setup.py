@@ -15,6 +15,7 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         "pip",
+        "requests",
         "distribute",
     ],
     entry_points={'console_scripts': [

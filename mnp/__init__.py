@@ -1,11 +1,14 @@
 import argparse
 import ConfigParser
+import getpass
 import os
 import sys
 
-from commands import docs, download, info, list_packages, search, upload
+from commands import docs, download, github_upload, info, list_packages, normal_upload, search
 from utils import craft_download_url
 
+# TODO: Change github application id once finalized
+pypi_github_id = "f7d6dae90c7584bb737f"
 default_pypi_name = "mininet"
 # TODO: Change to Mininet repo URL once finalized
 default_pypi_upload_url = "http://localhost:8000/"
@@ -37,7 +40,17 @@ def download_handler(args, additional_args):
     download(args.packages, index_url, additional_args)
 
 def upload_handler(args, additional_args):
-    upload(args.repository[0], additional_args)
+    repo = args.repository[0]
+    keys = set(x[0] for x in pypirc.items(repo))
+    if "username" in keys and "password" in keys:
+        normal_upload(repo, additional_args)
+    elif "github_username" in keys:
+        password = None
+        if "github_password" in keys:
+            password = pypirc.get(repo, "github_password")
+        else:
+            password = getpass.getpass("Enter your GitHub password: ")
+        github_upload(pypirc.get(repo, "repository"), pypi_github_id, pypirc.get(repo, "github_username"), password)
 
 def list_handler(args, additional_args):
     list_packages(pypirc.get(args.repository[0], "repository"))
