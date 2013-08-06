@@ -30,7 +30,6 @@ def get_github_hashed_token(github_username, github_password):
     elif auths.status_code == 401:
         print("Invalid username or password.")
     else:
-        print("HERE2")
         print("Error code: %s" % auths.status_code)
         print(auths.json()["message"])
         print(auths.text)
@@ -55,50 +54,17 @@ class github_mixin(Command, object):
         config["username"] = str(get_github_userid(github_username, github_password))
         config["password"] = get_github_hashed_token(github_username, github_password)
         return config
+
 """
-    setup.py subcommand to upload package using github token for authentication
+    setup.py subcommand to register package using github token for authentication
 """
 class github_register(github_mixin, register, object):
     pass
-    """
-    def _set_config(self):
-        super(github_register, self).finalize_options()
-        config = self._read_pypirc()
-        if config != {}:
-            print("config_gr", config)
-            print(dir(self))
-            print(self.repository)
-            self.username = config["github_userid"]
-            self.password = config["github_hashed_token"]
-    """
 
 """
     setup.py subcommand to upload package using github token for authentication
 """
 class github_upload(github_mixin, upload, object):
-    """
-    def _read_pypirc(self):
-        config = super(github_upload, self)._read_pypirc()
-        # Reopen pypirc file and read in additional configuration because
-        # distutils implementation doesn't read in everything.
-        repository = self.repository or self.DEFAULT_REPOSITORY
-        rc = self._get_rc_file()
-        if os.path.exists(rc):
-            cp = ConfigParser.ConfigParser()
-            cp.read(rc)
-            config["username"] = cp.get(repository, "github_username")
-            config["password"] = cp.get(repository, "github_password")
-        return config
-    """
-
-    """
-    def finalize_options(self):
-        config = self._read_pypirc()
-        if config != {}:
-            config["username"] = config["github_userid"]
-            config["password"] = config["github_hashed_token"]
-        super(github_upload, self).finalize_options()
-    """
     pass
 
 """
