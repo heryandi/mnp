@@ -50,7 +50,7 @@ def upload_handler(args, additional_args):
             password = pypirc.get(repo, "github_password")
         else:
             password = getpass.getpass("Enter your GitHub password: ")
-        github_upload(pypirc.get(repo, "repository"), pypi_github_id, pypirc.get(repo, "github_username"), password)
+        github_upload(repo, pypi_github_id, pypirc.get(repo, "github_username"), password, additional_args)
 
 def list_handler(args, additional_args):
     list_packages(pypirc.get(args.repository[0], "repository"))

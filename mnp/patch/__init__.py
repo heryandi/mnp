@@ -36,14 +36,15 @@ def get_github_hashed_token(github_username, github_password):
 
 class github_mixin(Command, object):
     def _read_pypirc(self):
-        config = super(github_mixin, self)._read_pypirc()
-        # Reopen pypirc file and read in additional configuration because
-        # distutils implementation doesn't read in everything.
-        repository = self.repository or self.DEFAULT_REPOSITORY
+        config = {}
+
         rc = self._get_rc_file()
         if os.path.exists(rc):
             cp = ConfigParser.ConfigParser()
             cp.read(rc)
+            repository = self.repository or self.DEFAULT_REPOSITORY
+            config["server"] = "pypi" if repository == self.DEFAULT_REPOSITORY else repository
+
             github_username = cp.get(repository, "github_username")
 
             keys = set(x[0] for x in cp.items(repository))
@@ -51,6 +52,8 @@ class github_mixin(Command, object):
                 github_password = getpass.getpass("Enter your GitHub password: ")
             else:
                 github_password = cp.get(repository, "github_password")
+            config["realm"] = cp.get(repository, "realm") if cp.has_option(repository, "realm") else self.DEFAULT_REALM
+            config["repository"] = cp.get(repository, "repository") if cp.has_option(repository, "repository") else self.DEFAULT_REPOSITORY
         config["username"] = str(get_github_userid(github_username, github_password))
         config["password"] = get_github_hashed_token(github_username, github_password)
         return config
