@@ -1,4 +1,5 @@
 import ConfigParser
+import getpass
 import hashlib
 import os
 
@@ -14,10 +15,11 @@ def get_github_userid(github_username, github_password):
     user = requests.get("https://api.github.com/user", auth = (github_username, github_password))
     if user.status_code == 200:
         return user.json()["id"]
-    elif auths.status_code == 401:
-        print("Invalid username or password.")
+    elif user.status_code == 401:
+        print("Invalid username or password")
     else:
         print(user.json()["message"])
+    return None
 
 def get_github_hashed_token(github_username, github_password):
     auths = requests.get("https://api.github.com/authorizations", auth = (github_username, github_password))
@@ -28,11 +30,11 @@ def get_github_hashed_token(github_username, github_password):
                 return hashed_token
         print("No matching token found. Make sure the github account is already registered with the website.")
     elif auths.status_code == 401:
-        print("Invalid username or password.")
+        print("Invalid username or password")
     else:
         print("Error code: %s" % auths.status_code)
         print(auths.json()["message"])
-        print(auths.text)
+    return None
 
 class github_mixin(Command, object):
     def _read_pypirc(self):
@@ -49,13 +51,22 @@ class github_mixin(Command, object):
 
             keys = set(x[0] for x in cp.items(repository))
             if "github_password" not in keys:
-                github_password = getpass.getpass("Enter your GitHub password: ")
+                # Store password into distribution object, so the value can persist
+                # across commands so user doesn't have to enter password multiple times.
+                if hasattr(self.distribution, "github_password"):
+                    github_password = self.distribution.github_password
+                else:
+                    github_password = getpass.getpass("Enter your GitHub password: ")
+                    self.distribution.github_password = github_password
             else:
                 github_password = cp.get(repository, "github_password")
             config["realm"] = cp.get(repository, "realm") if cp.has_option(repository, "realm") else self.DEFAULT_REALM
             config["repository"] = cp.get(repository, "repository") if cp.has_option(repository, "repository") else self.DEFAULT_REPOSITORY
-        config["username"] = str(get_github_userid(github_username, github_password))
-        config["password"] = get_github_hashed_token(github_username, github_password)
+
+            userid = get_github_userid(github_username, github_password)
+            if userid:
+                config["username"] = str(userid)
+                config["password"] = get_github_hashed_token(github_username, github_password)
         return config
 
 """
