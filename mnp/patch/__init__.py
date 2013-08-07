@@ -74,9 +74,9 @@ _setup = setuptools.setup
 def setup(**args):
     if "cmdclass" not in args:
         args["cmdclass"] = {}
-    if "github_upload" not in args["cmdclass"]:
+    if "github_register" not in args["cmdclass"]:
         args["cmdclass"]["github_register"] = github_register
+    if "github_upload" not in args["cmdclass"]:
         args["cmdclass"]["github_upload"] = github_upload
-    print(args)
     _setup(**args)
 setuptools.setup = setup
