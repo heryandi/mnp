@@ -63,10 +63,18 @@ class github_mixin(Command, object):
             config["realm"] = cp.get(repository, "realm") if cp.has_option(repository, "realm") else self.DEFAULT_REALM
             config["repository"] = cp.get(repository, "repository") if cp.has_option(repository, "repository") else self.DEFAULT_REPOSITORY
 
-            userid = get_github_userid(github_username, github_password)
-            if userid:
-                config["username"] = str(userid)
-                config["password"] = get_github_hashed_token(github_username, github_password)
+            # Store github userid and token so don't need to ask server again
+            if hasattr(self.distribution, "github_userid"):
+                config["username"] = self.distribution.github_userid
+                config["password"] = self.distribution.github_hashed_token
+            else:
+                userid = get_github_userid(github_username, github_password)
+                if userid:
+                    config["username"] = str(userid)
+                    config["password"] = get_github_hashed_token(github_username, github_password)
+                    self.distribution.github_userid = config["username"]
+                    self.distribution.github_hashed_token = config["password"]
+
         return config
 
 """
