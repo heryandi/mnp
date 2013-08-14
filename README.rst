@@ -24,6 +24,10 @@ Example usage:
 
     + mnp download <package> -i <repo_url>
 
+  - Download one package, forcing upgrade if package already installed:
+
+    + mnp download --upgrade <package>
+
 * Uploading:
 
   - Upload package:
