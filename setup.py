@@ -1,6 +1,5 @@
 import os
 
-import mnp.patch
 from setuptools import setup, find_packages
 
 setup(
