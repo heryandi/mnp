@@ -16,7 +16,7 @@ setup(
     install_requires=[
         "pip",
         "requests",
-        "distribute",
+        "setuptools",
     ],
     entry_points={'console_scripts': [
         'mnp = mnp:main',
