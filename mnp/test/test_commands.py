@@ -24,3 +24,25 @@ class DownloadTest(unittest.TestCase):
     def test_download_additional_args(self, mockSubprocess):
         download(["package1"], "indexUrl1", ["-v", "-v", "-v"])
         mockSubprocess.assert_called_once_with(["pip", "install", "package1", "--extra-index-url", "indexUrl1", "-v", "-v", "-v"])
+
+class NormalUploadTest(unittest.TestCase):
+    @patch("subprocess.check_call")
+    def test_normal_upload_simple(self, mockSubprocess):
+        normal_upload("default")
+        mockSubprocess.assert_called_once_with(["python", "setup.py", "register", "-r", "default", "sdist", "upload", "-r", "default"])
+
+    @patch("subprocess.check_call")
+    def test_normal_upload_additional_args(self, mockSubprocess):
+        normal_upload("default", ["anything", "everything"])
+        mockSubprocess.assert_called_once_with(["python", "setup.py", "register", "-r", "default", "sdist", "upload", "-r", "default", "anything", "everything"])
+
+class GitHubUploadTest(unittest.TestCase):
+    @patch("subprocess.check_call")
+    def test_github_upload_simple(self, mockSubprocess):
+        github_upload("default")
+        mockSubprocess.assert_called_once_with(["python", "setup.py", "github_register", "-r", "default", "sdist", "github_upload", "-r", "default"])
+
+    @patch("subprocess.check_call")
+    def test_github_upload_additional_args(self, mockSubprocess):
+        github_upload("default", ["anything", "everything"])
+        mockSubprocess.assert_called_once_with(["python", "setup.py", "github_register", "-r", "default", "sdist", "github_upload", "-r", "default", "anything", "everything"])
