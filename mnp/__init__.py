@@ -4,7 +4,7 @@ import getpass
 import os
 import sys
 
-from commands import docs, download, github_upload, info, list_packages, normal_upload, search
+from command import docs, download, github_upload, info, list_packages, normal_upload, search
 from utils import craft_download_url
 
 # TODO: Change github application id once finalized

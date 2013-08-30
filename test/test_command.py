@@ -2,7 +2,7 @@ import unittest
 
 from mock import patch
 
-from mnp.commands import *
+from mnp.command import *
 
 class DownloadTest(unittest.TestCase):
     @patch("subprocess.check_call")

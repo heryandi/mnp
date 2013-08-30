@@ -80,3 +80,11 @@ the file is setup properly.
   - <repo_url>: http://localhost:8000/simple/
 
 TODO: Update the default value of <repo_url> once finalized.
+
+
+mnp Development:
+----------------
+
+* Run unit tests:
+
+  - python -m unittest discover
