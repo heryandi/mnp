@@ -77,6 +77,29 @@ class ListPackageTest(XmlRpcTest):
 
         self.assertEquals(self.stringIO.getvalue(), "\n".join(self.list_packages_return_value) + "\n")
 
+class SearchPackageTest(XmlRpcTest):
+    def setUp(self):
+        super(SearchPackageTest, self).setUp()
+        self.search_return_value = [
+            {"name": "package1", "version": "1.0.0", "summary": "summary1"},
+            {"name": "package1", "version": "1.1.0", "summary": "summary1"},
+            {"name": "package2", "version": "1.0.0", "summary": "summary2"},
+        ]
+
+        self.mockServerProxy.return_value.search.return_value = self.search_return_value
+
+    def test_search(self):
+        search("indexUrl1", "query1")
+        self.mockServerProxy.assert_called_once_with("indexUrl1")
+        self.mockServerProxy.return_value.search.assert_called_once_with({"name": "query1", "summary": "query1"}, "or")
+
+        newest_packages = [
+            {"name": "package1", "version": "1.1.0", "summary": "summary1"},
+            {"name": "package2", "version": "1.0.0", "summary": "summary2"},
+        ]
+        expected_string = "\n".join("- ".join([p["name"].ljust(20), p["summary"]]) for p in newest_packages)
+        self.assertEquals(self.stringIO.getvalue(), expected_string + "\n")
+
 class DocsTest(XmlRpcTest):
     def setUp(self):
         super(DocsTest, self).setUp()
@@ -90,3 +113,34 @@ class DocsTest(XmlRpcTest):
         self.mockServerProxy.return_value.docs.assert_called_once_with("package1")
 
         self.assertEquals(self.stringIO.getvalue(), self.docs_return_value + "\n")
+
+class InfoTest(XmlRpcTest):
+    def setUp(self):
+        super(InfoTest, self).setUp()
+        self.info_return_value = {
+            "name": "name",
+            "version": "version",
+            "summary": "summary",
+            "author": "author",
+            "home_page": "home_page",
+            "project_page": "project_page"
+        }
+        self.mockServerProxy.return_value.info.return_value = self.info_return_value
+
+    def test_info(self):
+        info("indexUrl1", "package1", "version1")
+        self.mockServerProxy.assert_called_once_with("indexUrl1")
+        self.mockServerProxy.return_value.info.assert_called_once_with("package1", "version1")
+
+        expected_string = "\n".join(["Name: " + self.info_return_value["name"],
+            "Version: " + self.info_return_value["version"],
+            "Summary: " + self.info_return_value["summary"],
+            "Author: " + self.info_return_value["author"],
+            "Home page: " + self.info_return_value["home_page"],
+            "Project page: " + self.info_return_value["project_page"]])
+        self.assertEquals(self.stringIO.getvalue(), expected_string + "\n")
+
+    def test_info_no_version(self):
+        info("indexUrl1", "package1")
+        self.mockServerProxy.assert_called_once_with("indexUrl1")
+        self.mockServerProxy.return_value.info.assert_called_once_with("package1", -1)
